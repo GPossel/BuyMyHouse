@@ -34,7 +34,6 @@ namespace BuyMyHouse.Domain.Concrete
             ZipCode = zipCode;
             Country = country;
 
-            //Good PK and RK?
             PartitionKey = HouseId;
             RowKey = Street + ZipCode;
         }

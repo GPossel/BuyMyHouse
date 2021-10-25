@@ -62,7 +62,7 @@ namespace BuyMyHouse.Services
 
         public async Task SendToQue()
         {
-            await  _queStorage.CreateQueueMessage("email-que-item", "calculations are done. Sending email in background...");
+            await  _queStorage.CreateQueueMessage("email-que-item", "Calculations are done. Sending email in background...");
         }
 
 

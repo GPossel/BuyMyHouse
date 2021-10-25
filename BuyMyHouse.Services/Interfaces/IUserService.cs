@@ -12,8 +12,5 @@ namespace BuyMyHouse.Services.Interfaces
         Task<UserDTO> UpdateUser(UserDTO userDto);
         Task<bool> DeleteUser(string partioningKey, string rowKey);
         Task SendToQue();
-
-        //Task<List<UserDTO>> GetUsersByRowKey(string rowKey);
-        //Task<List<UserDTO>> GetUsersByPartitionKey(string partitionKey);
     }
 }

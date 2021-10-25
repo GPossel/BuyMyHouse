@@ -12,8 +12,5 @@ namespace BuyMyHouse.Infrastructure
         Task<T> UpdateEntity(T entity);
         Task<bool> DeleteEntity(string partitionKey, string rowKey);
 
-        //Task<IEnumerable<T>> GetEntitiesByPartitionKey(string partitionKey);
-        //Task<IEnumerable<T>> GetEntitiesByRowKey(string rowKey);
-
     }
 }

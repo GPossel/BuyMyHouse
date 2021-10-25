@@ -1,8 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using BuyMyHouse.Services.Interfaces;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
 
 namespace EmailQeuTrigger
 {

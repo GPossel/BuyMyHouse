@@ -1,9 +1,7 @@
 using System;
-using System.Configuration;
 using System.Threading.Tasks;
 using BuyMyHouse.Services.Interfaces;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
 
 namespace AzureFuncTimerTrigger
 {

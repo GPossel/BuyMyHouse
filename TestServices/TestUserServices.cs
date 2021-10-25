@@ -11,8 +11,9 @@ namespace TestServices
         [SetUp]
         public void Setup()
         {
-            var db = new Mock<TableStorageUser>();
-            var service = new UserService(db.Object);
+            var table_db = new Mock<TableStorageUser>();
+            var que_db = new Mock<QueStorage>();
+            var service = new UserService(table_db.Object, que_db.Object);
         }
 
 
@@ -20,17 +21,14 @@ namespace TestServices
         [Test]
         public void Test1()
         {
-            // arrange
-            var db = new Mock<TableStorageUser>();
-            var service = new UserService(db.Object);
+            var table_db = new Mock<TableStorageUser>();
+            var que_db = new Mock<QueStorage>();
+            var service = new UserService(table_db.Object, que_db.Object);
 
 
-            // act
             var user = new UserDAL { FirstName = "Gentle", LastName = "Possel", UserId = "12345" };
-      //      service.
             var result = service.GetEntity("12345", "GentlePossel");
 
-            // assert
             Assert.AreEqual(user.FirstName, result.Result.FirstName);
             Assert.AreEqual(user.LastName, result.Result.LastName);
             Assert.NotNull(result);
