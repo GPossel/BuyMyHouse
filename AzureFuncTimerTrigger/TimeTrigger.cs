@@ -17,7 +17,7 @@ namespace AzureFuncTimerTrigger
         }
 
         [Function("CalculateMortgage")]
-        public async Task CalculateMortgage([TimerTrigger("* * * * *"/*"59 23 * * *"*/)] MyInfo myTimer, FunctionContext context)
+        public async Task CalculateMortgage([TimerTrigger("59 23 * * *")] MyInfo myTimer, FunctionContext context)
         {
             var users = await _userService.GetUsers();
             foreach (var user in users)
@@ -27,7 +27,7 @@ namespace AzureFuncTimerTrigger
         }
 
         [Function("SendMailMessageOnQueue")]
-        public async Task SendMailMessageOnQueue([TimerTrigger("* * * * *"/*"0 9 * * *"*/)] MyInfo myTimer, FunctionContext context)
+        public async Task SendMailMessageOnQueue([TimerTrigger("0 9 * * *")] MyInfo myTimer, FunctionContext context)
         {
             await _userService.SendToQue();
         }
