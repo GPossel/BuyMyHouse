@@ -19,6 +19,7 @@ namespace BuyMyHouse.Services
     {
         private TableStorageHouse db_House { get; set; }
         private BlobStorage blobStorage { get; set; }
+
         public HouseService(TableStorageHouse tableStorageHouse, BlobStorage blobStorage)
         {
             this.db_House = tableStorageHouse;
@@ -54,6 +55,19 @@ namespace BuyMyHouse.Services
             var result = await db_House.UpdateEntity(userDAL);
             var houseDto = HouseConversionHelper.toDTO(result);
             return houseDto;
+        }
+
+        public async Task<bool> UpdateHousePicture(string houseId, string street, string zipcode, Stream stream)
+        {
+            var imageReferenceName = $"{houseId}-{street}-{zipcode}";
+            var result = await blobStorage.UploadImage(imageReferenceName, stream);
+            var imagUrl = await blobStorage.GetImage(imageReferenceName);
+            var house = await db_House.GetEntityByPartitionKeyAndRowKey(houseId, street+zipcode);
+
+            house.ImageURL = imagUrl;
+            await db_House.UpdateEntity(house);
+
+            return result;
         }
 
         public async Task<bool> DeleteHouse(string partioningKey, string rowKey)

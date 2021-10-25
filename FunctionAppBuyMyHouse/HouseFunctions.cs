@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace FunctionAppBuyMyHouse
@@ -89,6 +90,36 @@ namespace FunctionAppBuyMyHouse
             }
 
             await response.WriteAsJsonAsync(houseDTO);
+            return response;
+        }
+
+        [Function(nameof(UpdatePicture))]
+        [OpenApiParameter(name: "houseId", In = ParameterLocation.Query, Required = true, Type = typeof(string), Summary = "Id of house to get", Description = "The id of the house", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "street", In = ParameterLocation.Query, Required = true, Type = typeof(string), Summary = "street of the house", Description = "street", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "zipcode", In = ParameterLocation.Query, Required = true, Type = typeof(string), Summary = "zipcode of the house", Description = "zipcode", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiRequestBody(contentType: "image/png", bodyType: typeof(MediaTypeNames.Image), Required = true, Description = "Image to upload.")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Summary = "Successful operation", Description = "Successful operation")]
+        public async Task<HttpResponseData> UpdatePicture([HttpTrigger(AuthorizationLevel.Anonymous, "PUT", Route = "house/image")] HttpRequestData req, FunctionContext executionContext)
+        {
+
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+            var house = new HouseDTO();
+            var result = false;
+            try
+            {
+                Dictionary<string, StringValues> query = QueryHelpers.ParseQuery(req.Url.Query);
+                string houseId = query["houseId"];
+                string street = query["street"];
+                string zipcode = query["zipcode"];
+                house = await _houseService.GetEntity(houseId, street + zipcode);
+                result = await _houseService.UpdateHousePicture(houseId, street, zipcode, req.Body);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            await response.WriteAsJsonAsync(result);
             return response;
         }
 
