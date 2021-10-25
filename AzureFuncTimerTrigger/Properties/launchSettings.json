@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "AzureFuncTimerTrigger": {
+      "commandName": "Project"
+    }
+  }
+}

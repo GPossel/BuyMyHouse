@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspose.PDF" Version="21.10.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="SendGrid" Version="9.24.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuyMyHouse.Domain\BuyMyHouse.Domain.csproj" />
+    <ProjectReference Include="..\BuyMyHouse.Infrastructure\BuyMyHouse.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
