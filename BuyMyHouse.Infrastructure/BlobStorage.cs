@@ -76,6 +76,8 @@ namespace BuyMyHouse.Infrastructure
                 var cloudBlobContainer = GetContainerReference("pdf");
                 CloudBlockBlob cBlockBlob = cloudBlobContainer.GetBlockBlobReference(pdfRefName);
                 cBlockBlob.Properties.ContentType = "text/plain"; // application/pdf
+                // Set the CacheControl property to expire in 1 hour (3600 seconds)
+                cBlockBlob.Properties.CacheControl = "max-age=3600";
                 await cBlockBlob.UploadFromStreamAsync(pdf);
                 return true;
             }
