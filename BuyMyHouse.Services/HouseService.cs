@@ -66,11 +66,21 @@ namespace BuyMyHouse.Services
         {
             var maxMortage = new double();
             var minMortage = new double();
+            var pdfContent = "";
+            var filename = "";
 
             if (userDTO.Age < 18 || !userDTO.HasPermanentContract)
             {
                 maxMortage = 0;
                 minMortage = 0;
+
+                pdfContent = @$"Beste {userDTO.FirstName} {userDTO.LastName},
+                                            You will not recieve any available houses. Please update your credentials.
+                                            Mortag range: {minMortage} - {maxMortage}
+                                            Available houses: None.";
+
+                filename = $"{userDTO.UserId}-{userDTO.FirstName}-{userDTO.LastName}-document.txt";
+                await blobStorage.UploadPdf(filename, new MemoryStream(Encoding.UTF8.GetBytes(pdfContent ?? "")));
             }
 
             var totalMortage = userDTO.IncomeYearly * 30;
@@ -79,17 +89,18 @@ namespace BuyMyHouse.Services
 
             var houses = await GetHouses(minMortage, maxMortage);
 
-            var pdfContent = @$"Beste {userDTO.FirstName} {userDTO.LastName},
-            This is your mortage offer:
-                    Mortag range: {minMortage} - {maxMortage}
-                    Available houses:";
+            pdfContent = @$"Beste {userDTO.FirstName} {userDTO.LastName},
+                                                This is your mortage offer:
+                                                Mortag range: {minMortage} - {maxMortage}
+                                                Available houses:";
 
             foreach (var house in houses)
             {
                 pdfContent += $"{house.Title}, {house.Decsription}. The url: {house.ImageURL}";
             }
 
-            var filename = $"{userDTO.UserId}-{userDTO.FirstName}-{userDTO.LastName}-document.txt";
+            filename = $"{userDTO.UserId}-{userDTO.FirstName}-{userDTO.LastName}-document.txt";
+
             await blobStorage.UploadPdf(filename, new MemoryStream(Encoding.UTF8.GetBytes(pdfContent ?? "")));
         }
 
@@ -105,6 +116,8 @@ namespace BuyMyHouse.Services
 
         public async Task SendMail(UserDTO userDTO)
         {
+            if (userDTO.Email is null or "") return;
+
             var uri = await blobStorage.GetPdf($"{userDTO.UserId}-{userDTO.FirstName}-{userDTO.LastName}-document.txt");
 
             try
@@ -115,7 +128,7 @@ namespace BuyMyHouse.Services
                 var to = new EmailAddress(userDTO.Email, "");
                 var plainTextContent = "Find the houses available for you";
                 var htmlContent = $"<div><strong>Follow the link</strong><br>" +
-                                    $"<p>This is a temorary link <a href={uri}>Click here.k</a>.</p></div>";
+                                    $"<p>This is a temorary link <a href={uri}>Click here.</a>.</p></div>";
                 var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
                 var response = await client.SendEmailAsync(msg);
             }

@@ -33,7 +33,6 @@ namespace BuyMyHouse.Domain
             Debts = debts;
             HasPermanentContract = hasPermanentContract;
 
-            //Good PK and RK?
             PartitionKey = userId;
             RowKey = firstName + lastName;
         }
