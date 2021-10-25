@@ -110,7 +110,7 @@ namespace BuyMyHouse.Services
 
             foreach (var house in houses)
             {
-                pdfContent += $"{house.Title}, {house.Decsription}. The url: {house.ImageURL}";
+                pdfContent += $"{house.Title}, {house.Decsription}. The house: <img src={house.ImageURL}>";
             }
 
             filename = $"{userDTO.UserId}-{userDTO.FirstName}-{userDTO.LastName}-document.txt";
